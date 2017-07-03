@@ -234,6 +234,15 @@ messaging.onTokenRefresh(function() {
   }
 
 
+writeUserData("000001","tae","tanuk@hotmail.com","fburl")
+// ADD USER DATA
+function writeUserData(userId, name, email, imageUrl) {
+  firebase.database().ref('users/' + userId).set({
+    username: name,
+    email: email,
+    profile_picture : imageUrl
+  });
+}
 
   function checkConnection() {
         
