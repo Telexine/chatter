@@ -138,11 +138,11 @@ limitations under the License.
        <form  action="#">
 
               <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width:80%">
-                <input class="mdl-textfield__input" type="text" id="inputMsg"  onkeydown="if (event.keyCode == 13) { taddText();} "  >
+                <input class="mdl-textfield__input" type="text" id="inputMsg"  onkeydown="if (event.keyCode == 13) {  sendText();} "  >
                 <label class="mdl-textfield__label" for="sample3">Type Here...</label>
          
               </div>
-              <button onclick=addText(); class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+              <button onclick=sendText(); class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
               SEND
             </button>
             </form>
@@ -228,7 +228,7 @@ limitations under the License.
             </form>
   
   
-                <button onclick=addText(); class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                <button onclick=sendText(); class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
               Add
             </button>
             </form>
@@ -275,8 +275,7 @@ limitations under the License.
     messagingSenderId: "659586777397"
   };
   firebase.initializeApp(config);
-  
- 
+  let  name ,email,photoUrl,uid;
 
   // Innitialize FaceBook
 var provider = new firebase.auth.FacebookAuthProvider();
@@ -286,13 +285,21 @@ var provider = new firebase.auth.FacebookAuthProvider();
  // Check Logion State
 
 firebase.auth().onAuthStateChanged(function(user) {
+  console.log("onAuthStateChanged");
   if (user) {
     // User is signed in.  Refresh
+      name = user.displayName;
+      email = user.email;
+      photoUrl = user.photoURL;
+      uid = user.uid;  
     resetUI();
   } else {
     ShowLogin();
   }
 });
+
+ 
+
 
 
 
@@ -340,7 +347,7 @@ writeUserData(uid, name, email, photoUrl);
 
  function debug(){
 //firebase.auth().currentUse.accessToken.querySelector(email)
-   console.log();
+   console.log(name);
  }
  
   // MODAL
@@ -371,11 +378,40 @@ writeUserData(uid, name, email, photoUrl);
  
  
 // End Fb
+function getLastMessage() {
+   refMessages.limitToLast(1).on('child_added', function (snapshot) 
+   {
+       var data = snapshot.val();
+       $('#hf_lastfid').val(data.fbid);
+       $('#hf_lastdir').val(data.dir);
+   });
+}
 
 
+newPostKey = firebase.database().ref()
+
+function getPost(){
 
 
+var ref = firebase.database().ref("chat/room1/");
+ref.orderByKey().limitToLast(50).on("child_added", function(snapshot) {
+  console.log(snapshot.key);
+  console.log(snapshot.val().message);
+  console.log(snapshot.val().uid);
+  console.log();
+});
 
+}
+
+function listin(){
+
+
+  var ref = firebase.database().ref("chat/room1/");
+
+  ref.on('child_added', function(childSnapshot, prevChildKey) {
+   
+});
+}
 
 
 
@@ -383,27 +419,52 @@ writeUserData(uid, name, email, photoUrl);
   // Retrieve Firebase Messaging object.
   const messaging = firebase.messaging();
  
-function addText(){
+function sendText(){
+
+
   var rootRef = firebase.database().ref();
   var storesRef = rootRef.child('chat/room1');
   var newStoreRef = storesRef.push();
   
   let txtMsg  = document.getElementById("inputMsg").value;
-  
-  let id = "00001";
+   if(txtMsg==null||txtMsg==""){return}
+
+var sendtData = {
+    uid: uid,
+    name:name,
+    message: txtMsg,
+    timestamp: firebase.database.ServerValue.TIMESTAMP
+  };
+
+
 
   document.getElementById("inputMsg").value="";
 
-  appendMessage(txtMsg);
-  
-  
-  newStoreRef.set({
-    uid: id,
-    "nickname": "Tae",
-    "message": txtMsg,
-    "timestamp": $.now()
-  });
+
+
+  var newPostKey = firebase.database().ref().child('chat').child('room1').push().key;
+
+  // Write the new post's data simultaneously in the posts list and the user's post list.
+  var updates = {};
+  updates['/chat/'+'room1/' + newPostKey] = sendtData;
+
+   appendMessage(txtMsg);
+  return firebase.database().ref().update(updates);
+
+
 }
+
+
+function writeNewPost(uid, username, picture, title, body) {
+  // A post entry.
+  var postData = {
+    author: username,
+    uid: uid,
+    body: body,
+    title: title,
+    starCount: 0,
+    authorPic: picture
+  };}
 
 function Uppic(Title,image){
 
@@ -560,7 +621,7 @@ function writeNewPost(uid, username, picture, title, body) {
     showHideDiv(tokenDivId, false);
     showHideDiv(permissionDivId, true);
   }
-
+ 
   //resetUI();
 </script>
 </body>
