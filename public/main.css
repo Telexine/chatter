@@ -59,4 +59,9 @@ h3 {
   margin: auto 5px 3px 5px;  
 
 }
-
+#imavatar{
+  border-radius: 500px 500px 500px 500px;
+    border: 5px solid white;
+    width: 30%;
+}
+ 
