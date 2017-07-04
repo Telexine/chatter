@@ -21,7 +21,7 @@ limitations under the License.
   <title>Firebase Cloud Messaging </title>
 
   <!-- Material Design Theming -->
-  <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.orange-indigo.min.css">
+
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
 
@@ -30,6 +30,38 @@ limitations under the License.
  
 </head>
 <body>
+
+  
+ <!--   login   Div  -->
+
+
+<dialog class="mdl-dialog">
+    <div class="mdl-dialog__content">
+      <p>
+             <!-- <a href="#"onclick="firebase.auth().signInWithPopup(provider)">LOGIN</a> -->
+      </p>
+    </div>
+
+     <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
+
+        <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
+      <button type="button" class="mdl-button fblogin">Login</button>
+      <button type="button" class="mdl-button close">Cancel</button>
+    </div>
+
+
+    </div>
+
+    
+  </dialog>
+
+
+ <!--    End login    -->
+
+
+
+
+
 
 
 
@@ -57,7 +89,7 @@ limitations under the License.
       
       
       
-      
+        
       
       
       
@@ -67,11 +99,16 @@ limitations under the License.
       
       <div class="mdl-shadow--2dp chatBox">
       
+
+          <div id="messages">
+
+          </div>
+
+
         <div class="mdl-card__actions mdl-card--border">
     <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
      
-     
-
+ 
       
 
     </a>
@@ -79,24 +116,27 @@ limitations under the License.
   <div class="mdl-card__menu">
     <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
       <i class="material-icons">share</i>
+      
     </button>
   </div>
 </div>
 
 
       
-   <footer class="mdl-mini-footer ">
-       <form style="" action="#">
+   <footer class="SendBox ">
+     <div style="margin:auto">
+       <form  action="#">
 
               <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width:80%">
-                <input class="mdl-textfield__input" type="text" id="inputMsg">
+                <input class="mdl-textfield__input" type="text" id="inputMsg"  onkeydown="if (event.keyCode == 13) { taddText();} "  >
                 <label class="mdl-textfield__label" for="sample3">Type Here...</label>
          
               </div>
-                             <button onclick=addText(); class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+              <button onclick=addText(); class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
               SEND
             </button>
             </form>
+              </div>
   </footer>
   
   
@@ -212,6 +252,7 @@ limitations under the License.
 <script src="/firebase-messageing-sw.js" type="text/javasctipt"></script>
 
 
+
 <script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
 <script>
   // Initialize Firebase
@@ -227,8 +268,104 @@ limitations under the License.
   
 
 
-</script>
-<script>
+
+  // Innitialize FaceBook
+    var provider = new firebase.auth.FacebookAuthProvider();
+    //provider.addScope('user_birthday');
+ provider.addScope('user_birthday');
+ 
+ // Check Logion State
+
+firebase.auth().onAuthStateChanged(function(user) {
+ if(user=="undefined"){
+   ShowLogin();
+ }
+});
+
+
+
+
+
+function CreateNewUser(){
+
+var user = firebase.auth().currentUser;
+
+if (user) {
+  // User is signed in.
+
+var user = firebase.auth().currentUser;
+var name, email, photoUrl, uid, emailVerified;
+
+ 
+if (user != null) {
+  name = user.displayName;
+  email = user.email;
+  photoUrl = user.photoURL;
+  uid = user.uid;  // The user's ID, unique to the Firebase project. Do NOT use
+                   // this value to authenticate with your backend server, if
+                   // you have one. Use User.getToken() instead.
+writeUserData(uid, name, email, photoUrl);
+ 
+  console.log(name);
+  console.log(email);
+  console.log(photoUrl);
+  console.log("UID :"+uid);
+}
+
+
+ 
+
+
+
+} else {
+  // No user is signed in.
+  console.log("User not login")
+  ShowLogin();
+}
+}
+
+
+ function debug(){
+//firebase.auth().currentUse.accessToken.querySelector(email)
+   console.log();
+ }
+ 
+  // MODAL
+  
+ 
+    var dialog = document.querySelector('dialog');
+    var showModalButton = document.querySelector('.show-modal');
+    if (! dialog.showModal) {
+      dialogPolyfill.registerDialog(dialog);
+    }
+    dialog.querySelector('.fblogin').addEventListener('click', function() {
+      firebase.auth().signInWithPopup(provider);
+      debug();
+      dialog.close();
+      CreateNewUser();
+    });
+    dialog.querySelector('.close').addEventListener('click', function() {
+      dialog.close();
+    });
+  
+
+  function ShowLogin(){
+    dialog.showModal();
+  }
+ //MODAL
+
+// FB 
+ 
+ 
+// End Fb
+
+
+
+
+
+
+
+
   // [START get_messaging_object]
   // Retrieve Firebase Messaging object.
   const messaging = firebase.messaging();
@@ -242,7 +379,8 @@ function addText(){
   
   let id = "00001";
 
-  
+  document.getElementById("inputMsg").value="";
+
   appendMessage(txtMsg);
   
   
@@ -347,11 +485,11 @@ messaging.onTokenRefresh(function() {
 
 
 // ADD USER DATA
-function writeUserData(userId, name, email, imageUrl) {
+function writeUserData(userId, name, email, avatar) {
   firebase.database().ref('users/' + userId).set({
     username: name,
     email: email,
-    profile_picture : imageUrl
+    profile_picture : avatar,
   });
 }
 
