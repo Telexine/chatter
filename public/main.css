@@ -1,38 +1,4 @@
-
-Skip to content
-This repository
-Search
-Pull requests
-Issues
-Marketplace
-Gist
- @Telexine
- Sign out
- Watch 91
-  Star 961
-  Fork 969 firebase/quickstart-js
- Code  Issues 32  Pull requests 0  Projects 0  Wiki Insights 
-Branch: master Find file Copy pathquickstart-js/messaging/main.css
-4978068  on Sep 29, 2016
-@kroikie kroikie Sample first update.
-1 contributor
-RawBlameHistory     
-55 lines (53 sloc)  1.2 KB
-/**
- * Copyright 2015 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+ 
 
 html, body {
   font-family: 'Roboto', 'Helvetica', sans-serif;
@@ -71,6 +37,18 @@ h3 {
   background-size: 40px;
   padding-left: 50px;
   color: white;
+ 
 }
-Contact GitHub API Training Shop Blog About
-© 2017 GitHub, Inc. Terms Privacy Security Status Help
+
+
+.demo-card-wide.mdl-card {
+  width: 90%;
+}
+
+.chatBox{
+  width: 90%;
+  
+  margin: 3px 5px 3px 5px;  
+
+}
+
