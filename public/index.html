@@ -30,7 +30,7 @@ limitations under the License.
  
 </head>
 <body>
-
+ 
   
  <!--   login   Div  -->
 
@@ -67,8 +67,8 @@ limitations under the License.
 
 <!-- Simple header with fixed tabs. -->
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header  
-            mdl-layout--fixed-tabs">
-  <header class="mdl-layout__header ">
+            mdl-layout--fixed-tabs" >
+  <header class="mdl-layout__header " >
     <div class="mdl-layout__header-row">
       <!-- Title -->
       <span class="mdl-layout-title">Firebase Cloud Messaging</span>
@@ -89,52 +89,57 @@ limitations under the License.
     </span>
   </div>
   <main class="mdl-layout__content">
-    <section class="mdl-layout__tab-panel is-active" id="fixed-tab-1">
-      <div class="page-content"><!-- Your content goes here -->
+    <section class="mdl-layout__tab-panel is-active" id="fixed-tab-1 ">
+      <div class="page-content" ><!-- Your content goes here -->
       
+
+
+
+
+      <!-- DEBUG  FACEBOOK 
        <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
 
         <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
       <button type="button" class="mdl-button" onclick="ShowLogin()">FaceBook</button>
        
-    </div>
-
-        
-      
-      
-      
-      
-      
-      
-      
-      <div class="mdl-shadow--2dp chatBox">
-      
-
-          <div id="messages">
-
           </div>
 
+      -->
+      
+      
+         <div id="messages" >
 
-        <div class="mdl-card__actions mdl-card--border">
+          </div>
+ 
+ 
+      <!--
+      
+      <div class="mdl-shadow--2dp chatBox mdl-layout__header--scroll ">
+      
+
+       
+
+        <div class="mdl-card__actions mdl-card--border" style="">
     <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
      
  
-      
 
     </a>
   </div>
   <div class="mdl-card__menu">
     <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-      <i class="material-icons">share</i>
+    
       
     </button>
   </div>
 </div>
-
+-->
 
       
-   <footer class="SendBox ">
-     <div style="margin:auto">
+   <div class="SendBox" style="display:block;  
+    bottom: 0;overflow:hidden;position:fixed;right:0;
+">
+     <div style="margin:auto;right:0;">
        <form  action="#">
 
               <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width:80%">
@@ -147,8 +152,13 @@ limitations under the License.
             </button>
             </form>
               </div>
-  </footer>
+  </div>
   
+  
+
+
+
+
   
       
       <!-- PAGE 1 -->
@@ -374,10 +384,7 @@ writeUserData(uid, name, email, photoUrl);
   }
  //MODAL
 
-// FB 
- 
- 
-// End Fb
+// MESAAGE
 function getLastMessage() {
    refMessages.limitToLast(1).on('child_added', function (snapshot) 
    {
@@ -395,16 +402,25 @@ function getPost(){
 
 var ref = firebase.database().ref("chat/room1/");
 ref.orderByKey().limitToLast(50).on("child_added", function(snapshot) {
+
+ 
+  /*
   console.log(snapshot.key);
   console.log(snapshot.val().message);
   console.log(snapshot.val().uid);
-  console.log();
+ */
+ 
+ 
+ appendMessage(snapshot.val().message,snapshot.val().uid, snapshot.val().timestamp);
+
 });
+
+
 
 }
 
 function listin(){
-
+  
 
   var ref = firebase.database().ref("chat/room1/");
 
@@ -447,8 +463,7 @@ var sendtData = {
   // Write the new post's data simultaneously in the posts list and the user's post list.
   var updates = {};
   updates['/chat/'+'room1/' + newPostKey] = sendtData;
-
-   appendMessage(txtMsg);
+ 
   return firebase.database().ref().update(updates);
 
 
@@ -546,13 +561,30 @@ messaging.onTokenRefresh(function() {
 
 
   // Add a message to the messages element.
-  function appendMessage(payload) {
+  function appendMessage(message,uid,timestamp) {
+
+
+    let date = new Date(timestamp);
+       
+      date =     date.getDate() + '/' + (date.getMonth()+1) + '/' + date.getFullYear()+"  "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+ 
+    //new Date(snapshot.val().timestamp));
+    //console.log(showTimestamp(timestamp));
+
+   //let date  = showTimestamp(timestamp);
+
+    /*
+<h5>Received message: on 4/7/2017  20:43:1</h5>
+<pre style="overflow-x: hidden;">ddddd</pre>
+    */
+
+
     const messagesElement = document.querySelector('#messages');
     const dataHeaderELement = document.createElement('h5');
     const dataElement = document.createElement('pre');
     dataElement.style = 'overflow-x:hidden;'
-    dataHeaderELement.textContent = 'Received message:';
-    dataElement.textContent = JSON.stringify(payload, null, 2);
+    dataHeaderELement.textContent = 'Received message: on '+date;
+    dataElement.textContent =  message;
     messagesElement.appendChild(dataHeaderELement);
     messagesElement.appendChild(dataElement);
   }
