@@ -64,4 +64,21 @@ h3 {
     border: 5px solid white;
     width: 30%;
 }
- 
+
+
+.back-to-top{
+  font-weight: bold;
+  text-decoration: none;
+  color: #fff;
+  background: #7f8c8d;
+  height: 50px;
+  width: 50px;
+  display: inline-block;
+  text-align: center;
+  line-height: 60px;
+  font-size: 30px;
+  font-family: Times New Roman;
+  position: fixed;;
+  bottom: 30px;
+  right: 30px;
+}

@@ -68,7 +68,7 @@ limitations under the License.
 <!-- Simple header with fixed tabs. -->
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header  
             mdl-layout--fixed-tabs" >
-  <header class="mdl-layout__header " >
+  <header class="mdl-layout__header " id="header" >
     <div class="mdl-layout__header-row">
       <!-- Title -->
       <span class="mdl-layout-title">Firebase Cloud Messaging</span>
@@ -89,7 +89,7 @@ limitations under the License.
     </span>
   </div>
   <main class="mdl-layout__content">
-    <section class="mdl-layout__tab-panel is-active" id="fixed-tab-1 ">
+    <section class="mdl-layout__tab-panel is-active" id="fixed-tab-1"style="overflow-x: scroll;">
       <div class="page-content" ><!-- Your content goes here -->
       
 
@@ -110,6 +110,7 @@ limitations under the License.
          <div id="messages" >
 
           </div>
+ 
  
  
       <!--
@@ -136,7 +137,7 @@ limitations under the License.
 -->
 
       
-   <div class="SendBox" style="display:block;  
+   <div id="bottomBox"class="SendBox" style="display:block;  
     bottom: 0;overflow:hidden;position:fixed;right:0;
 ">
      <div style="margin:auto;right:0;">
@@ -308,9 +309,23 @@ firebase.auth().onAuthStateChanged(function(user) {
   }
 });
 
+
+
+
+
+// Listening On change 
+  var Rref = firebase.database().ref("chat/room1/");
+  Rref.orderByKey().limitToLast(5).on('child_added', function(childSnapshot, prevChildKey) {
  
 
-
+ 
+ 
+ appendMessage(childSnapshot.val().message,childSnapshot.val().uid, childSnapshot.val().timestamp);
+ 
+   console.log("Get Data");
+});
+ 
+//get Post 
 
 
 function resetUI( ){
@@ -319,7 +334,24 @@ var user = firebase.auth().currentUser;
 
  $("#imavatar").attr("src",user.photoURL);
  $("#uname").text(user.displayName);
+ 
 
+
+
+ let bottomBoxH = document.getElementById('bottomBox').offsetHeight;
+
+ let headerH = document.getElementById('header').offsetHeight;
+ console.log(getDocHeight()-(bottomBoxH+headerH));
+
+ //document.getElementById('fixed-tab-1').style.height = '"'+getDocHeight()-(bottomBoxH+headerH)+'px"';
+ $('#fixed-tab-1').height( getDocHeight()-(bottomBoxH+headerH) );
+ 
+ // NEED TO PUT THIS OUT !!
+ 
+ ///
+
+
+ getToBottom();
  }
 
 
@@ -354,10 +386,9 @@ writeUserData(uid, name, email, photoUrl);
 }
 }
 
-
  function debug(){
 //firebase.auth().currentUse.accessToken.querySelector(email)
-   console.log(name);
+   $('html,body').animate({scrollTop: document.body.scrollHeight},"fast");
  }
  
   // MODAL
@@ -419,15 +450,6 @@ ref.orderByKey().limitToLast(50).on("child_added", function(snapshot) {
 
 }
 
-function listin(){
-  
-
-  var ref = firebase.database().ref("chat/room1/");
-
-  ref.on('child_added', function(childSnapshot, prevChildKey) {
-   
-});
-}
 
 
 
@@ -464,9 +486,10 @@ var sendtData = {
   var updates = {};
   updates['/chat/'+'room1/' + newPostKey] = sendtData;
  
-  return firebase.database().ref().update(updates);
-
-
+   firebase.database().ref().update(updates);
+getToBottom();
+console.log("bootom");
+   
 }
 
 
@@ -558,6 +581,24 @@ messaging.onTokenRefresh(function() {
       div.style = "display: none";
     }
   }
+  
+
+
+function getDocHeight(){
+
+      var body = document.body,
+      html = document.documentElement;
+
+
+  return Math.max( body.scrollHeight, body.offsetHeight, 
+                       html.clientHeight, html.scrollHeight, html.offsetHeight );
+
+}
+
+
+function getToBottom(){
+    $('.mdl-layout__content').animate({ scrollTop: getDocHeight() }, 'slow');
+}
 
 
   // Add a message to the messages element.
@@ -566,7 +607,7 @@ messaging.onTokenRefresh(function() {
 
     let date = new Date(timestamp);
        
-      date =     date.getDate() + '/' + (date.getMonth()+1) + '/' + date.getFullYear()+"  "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+      date =     date.getDate() + '/' + (date.getMonth()) + '/' + date.getFullYear()+"  "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
  
     //new Date(snapshot.val().timestamp));
     //console.log(showTimestamp(timestamp));
@@ -656,5 +697,7 @@ function writeNewPost(uid, username, picture, title, body) {
  
   //resetUI();
 </script>
+
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 </body>
 </html>
