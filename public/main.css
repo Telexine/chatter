@@ -76,11 +76,13 @@ h3 {
 .chatCard .avatar{
 
   border-radius: 500px 500px 500px 500px;
-    border: 1px solid white;
+    border: 3px solid white;
     width: 40%;
 
 
 }
+ 
+
 .chatCard  .chatleftCard{
   float:left;
 }

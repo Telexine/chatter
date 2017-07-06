@@ -45,7 +45,7 @@ limitations under the License.
      <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
 
         <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
-      <button type="button" class="mdl-button fblogin">Login</button>
+      <button type="button" class="mdl-button fblogin">Login with FB</button>
       <button type="button" class="mdl-button close">Cancel</button>
     </div>
 
@@ -303,6 +303,26 @@ firebase.auth().onAuthStateChanged(function(user) {
       email = user.email;
       photoUrl = user.photoURL;
       uid = user.uid;  
+
+
+      //This User Is Online
+      var amOnline = firebase.database().ref(".info/connected");
+      var userRef = firebase.database().ref("presence/" + uid);
+      amOnline.on('value', function(snapshot) {
+        if (snapshot.val()) {
+
+          //userRef.onDisconnect().remove();
+           
+          userRef.onDisconnect().remove();
+           
+ 
+          userRef.set(true);
+        }
+      });
+
+
+
+
     resetUI();
   } else {
     ShowLogin();
@@ -311,22 +331,48 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 
 
+// =====   Listening   ======
 
-
-// Listening On change 
+// Listening On chat 
   var Rref = firebase.database().ref("chat/room1/");
   Rref.orderByKey().limitToLast(10).on('child_added', function(childSnapshot, prevChildKey) {
  
-
- 
- 
  appendMessage(childSnapshot.val().message,childSnapshot.val().uAvartar,childSnapshot.val().uid,childSnapshot.val().name, childSnapshot.val().timestamp);
- 
-   console.log("Get Data");
+  
 });
  
+// Listen online state var userRef = firebase.database().ref("presence/" + uid);
+  var userState = firebase.database().ref("presence/");
+  
+  userState.on('child_added', function(childSnapshot, prevChildKey) {
+     
+    console.log("This Id is login "+ childSnapshot.key);
+     
+     avartarOnline(childSnapshot.key);
+
+});
+userState.on('child_removed', function(childSnapshot) {
+  console.log("This Id is logoff  "+ childSnapshot.key);
+  avartarOffline(childSnapshot.key);
+});
+
+
+
 //get Post 
 
+function avartarOnline(uid){
+  $('.'+uid).each(function(i, obj) {
+    obj.style="border-color:green;";
+});
+
+}
+
+function avartarOffline(uid){
+  $('.'+uid).each(function(i, obj) {
+    obj.style="border-color:white;";
+});
+
+}
 
 function resetUI( ){
 
@@ -670,7 +716,7 @@ function getToBottom(){
   
 
     //init Avatar
-    dataAvartar.className="avatar";
+    dataAvartar.className="avatar "+uid;
     dataAvartar.src=avatar;
     
     datarightTopElement.textContent="from "+name+" on " +date;
