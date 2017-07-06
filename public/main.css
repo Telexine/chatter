@@ -61,38 +61,56 @@ h3 {
 }
 #imavatar{
   border-radius: 500px 500px 500px 500px;
-    border: 5px solid white;
+    border: 2px solid white;
     width: 30%;
 }
 
 
 .chatCard{
 
-
-
+  margin: 5px 5px 5px 5px;
+   
+  padding-bottom: 30px;
 }
 
 .chatCard .avatar{
 
   border-radius: 500px 500px 500px 500px;
-    border: 5px solid white;
-    width: 10%;
+    border: 1px solid white;
+    width: 40%;
 
 
 }
-.chatleftCard{
-
-
+.chatCard  .chatleftCard{
+  float:left;
 }
 
-.chatrightCard{
+.chatCard  .curChatleftCard {
+  float:right;
+}
+
+.chatCard  .chatrightCard{
   
 
 }
+.chatCard .top{
+    font-size: .8em;
+    color: gray;
+}
+.chatCard .curTop{
+    text-align: right;
+    font-size: .8em;
+    color: gray;
+}
 
+.chatCard .bottom{
+ font-size: 1.3em;
+}
 
-
-
+.chatCard .curBottom{
+  text-align: right;
+  font-size: 1.3em;
+}
 .back-to-top{
   font-weight: bold;
   text-decoration: none;

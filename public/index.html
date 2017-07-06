@@ -614,20 +614,9 @@ function getToBottom(){
   // Add a message to the messages element.
   function appendMessage(message,avatar,uid,name,timestamp) {
 
-    
-    console.log("Uid = "+uid);
-
     let date = new Date(timestamp);
-   
-     
- 
-
-      date =     date.getDate() + '/' + (date.getMonth()) + '/' + date.getFullYear()+"  "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
- 
-    //new Date(snapshot.val().timestamp));
-    //console.log(showTimestamp(timestamp));
-
-   //let date  = showTimestamp(timestamp);
+    date = date.getDate() + '/' + (date.getMonth()) + '/' + date.getFullYear()+"  "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+  
 
     /*
 <h5>Received message: on 4/7/2017  20:43:1</h5>
@@ -650,19 +639,42 @@ function getToBottom(){
     const dataElement = document.createElement('pre');
 
 
+    let user = firebase.auth().currentUser;
+    // add class 
 
     dataDivElement.className = "chatCard";
+    datarightTopElement.className ="top";
+    
+
+
+    if(user.uid==uid){
 
  
+    dataleftElement.className= "curChatleftCard";
+    datarightTopElement.className ="curTop";
+    datarightElement.className= "chatrightCard";
+    datarightBottomElement.className ="curBottom";
+
+    //int 
+     datarightBottomElement.textContent= message;
+  }else{
+    datarightTopElement.className ="top";
+    datarightBottomElement.className ="bottom";
     dataleftElement.className= "chatleftCard";
     datarightElement.className= "chatrightCard";
+
+    //init
+       datarightBottomElement.textContent= message;
+
+  }
+  
 
     //init Avatar
     dataAvartar.className="avatar";
     dataAvartar.src=avatar;
     
-    datarightTopElement.textContent= date;
-    datarightBottomElement.textContent= name+" : "+message;
+    datarightTopElement.textContent="from "+name+" on " +date;
+      
 
     dataElement.style = 'overflow-x:hidden;'
     //dataHeaderElement.textContent = 'Received message: on '+date;
@@ -680,7 +692,7 @@ function getToBottom(){
  
 
     //append Messgage
-    datarightBottomElement.appendChild(dataElement);
+    //datarightBottomElement.appendChild(dataElement);
   }
 
 
