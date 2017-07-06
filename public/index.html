@@ -315,12 +315,12 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 // Listening On change 
   var Rref = firebase.database().ref("chat/room1/");
-  Rref.orderByKey().limitToLast(5).on('child_added', function(childSnapshot, prevChildKey) {
+  Rref.orderByKey().limitToLast(10).on('child_added', function(childSnapshot, prevChildKey) {
  
 
  
  
- appendMessage(childSnapshot.val().message,childSnapshot.val().uid, childSnapshot.val().timestamp);
+ appendMessage(childSnapshot.val().message,childSnapshot.val().uAvartar,childSnapshot.val().uid,childSnapshot.val().name, childSnapshot.val().timestamp);
  
    console.log("Get Data");
 });
@@ -428,15 +428,21 @@ function getLastMessage() {
 
 function getUserAvatar(UID) {
 
-  
-  
+ 
+
+ 
   firebase.database().ref('/users/' + UID).once('value').then(function(snapshot) {
-  return snapshot.val().profile_picture;
-
+    let URL = snapshot.val().profile_picture;
+   console.log(URL);
+  return URL;
 });
+}
 
 
-
+function getUserName(UID) {
+  firebase.database().ref('/users/' + UID).once('value').then(function(snapshot) {
+  return snapshot.val().username;
+});
 }
 
 
@@ -455,7 +461,7 @@ ref.orderByKey().limitToLast(50).on("child_added", function(snapshot) {
  */
  
  
- appendMessage(snapshot.val().message,snapshot.val().uid, snapshot.val().timestamp);
+ appendMessage(snapshot.val().message,snapshot.val().appendMessage,snapshot.val().uid,snapshot.val().name, snapshot.val().timestamp);
 
 });
 
@@ -482,6 +488,7 @@ function sendText(){
 
 var sendtData = {
     uid: uid,
+    uAvartar: photoUrl,
     name:name,
     message: txtMsg,
     timestamp: firebase.database.ServerValue.TIMESTAMP
@@ -500,22 +507,12 @@ var sendtData = {
   updates['/chat/'+'room1/' + newPostKey] = sendtData;
  
    firebase.database().ref().update(updates);
-getToBottom();
-console.log("bootom");
+   getToBottom();
+ 
    
 }
 
-
-function writeNewPost(uid, username, picture, title, body) {
-  // A post entry.
-  var postData = {
-    author: username,
-    uid: uid,
-    body: body,
-    title: title,
-    starCount: 0,
-    authorPic: picture
-  };}
+ 
 
 function Uppic(Title,image){
 
@@ -615,11 +612,16 @@ function getToBottom(){
 
 
   // Add a message to the messages element.
-  function appendMessage(message,uid,timestamp) {
+  function appendMessage(message,avatar,uid,name,timestamp) {
 
+    
+    console.log("Uid = "+uid);
 
     let date = new Date(timestamp);
-       
+   
+     
+ 
+
       date =     date.getDate() + '/' + (date.getMonth()) + '/' + date.getFullYear()+"  "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
  
     //new Date(snapshot.val().timestamp));
@@ -632,15 +634,53 @@ function getToBottom(){
 <pre style="overflow-x: hidden;">ddddd</pre>
     */
 
-
+    //create Body
     const messagesElement = document.querySelector('#messages');
-    const dataHeaderELement = document.createElement('h5');
+    const dataDivElement = document.createElement('div');
+    const dataleftElement = document.createElement('div');
+    const datarightElement = document.createElement('div');
+    
+    const datarightTopElement = document.createElement('div');
+    const datarightBottomElement = document.createElement('div');
+
+
+    //create message
+    const dataAvartar =document.createElement('img');
+    const dataHeaderElement = document.createElement('h5');
     const dataElement = document.createElement('pre');
+
+
+
+    dataDivElement.className = "chatCard";
+
+ 
+    dataleftElement.className= "chatleftCard";
+    datarightElement.className= "chatrightCard";
+
+    //init Avatar
+    dataAvartar.className="avatar";
+    dataAvartar.src=avatar;
+    
+    datarightTopElement.textContent= date;
+    datarightBottomElement.textContent= name+" : "+message;
+
     dataElement.style = 'overflow-x:hidden;'
-    dataHeaderELement.textContent = 'Received message: on '+date;
+    //dataHeaderElement.textContent = 'Received message: on '+date;
     dataElement.textContent =  message;
-    messagesElement.appendChild(dataHeaderELement);
-    messagesElement.appendChild(dataElement);
+    
+
+
+    //append Body
+    datarightElement.appendChild(datarightTopElement);
+    datarightElement.appendChild(datarightBottomElement);
+    dataleftElement.appendChild(dataAvartar);
+    dataDivElement.appendChild(dataleftElement);
+    dataDivElement.appendChild(datarightElement);
+    messagesElement.appendChild(dataDivElement);
+ 
+
+    //append Messgage
+    datarightBottomElement.appendChild(dataElement);
   }
 
 
