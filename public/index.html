@@ -88,7 +88,7 @@ limitations under the License.
      <span class="mdl-layout-title" id="uname">    
     </span>
   </div>
-  <main class="mdl-layout__content">
+  <main class="mdl-layout__content"  >
     <section class="mdl-layout__tab-panel is-active" id="fixed-tab-1"style="overflow-x: scroll;">
       <div class="page-content" ><!-- Your content goes here -->
       
@@ -172,10 +172,24 @@ limitations under the License.
       <div class="page-content"><!-- Your content goes here --></div>
     </section>
   </main>
+  
+
+
+
+<!-- Toast Notification  -->
+ 
+<div id="demo-toast-example" class="mdl-js-snackbar mdl-snackbar">
+  <div class="mdl-snackbar__text"></div>
+  <button class="mdl-snackbar__action" type="button"></button>
+</div>
+
+</body>
+
+
+  
 </div>
 
 
-</body>
 
 <style>
 
@@ -304,6 +318,8 @@ firebase.auth().onAuthStateChanged(function(user) {
       photoUrl = user.photoURL;
       uid = user.uid;  
 
+        // hot fix 
+        CreateNewUser();
 
       //This User Is Online
       var amOnline = firebase.database().ref(".info/connected");
@@ -338,7 +354,7 @@ firebase.auth().onAuthStateChanged(function(user) {
   Rref.orderByKey().limitToLast(10).on('child_added', function(childSnapshot, prevChildKey) {
  
  appendMessage(childSnapshot.val().message,childSnapshot.val().uAvartar,childSnapshot.val().uid,childSnapshot.val().name, childSnapshot.val().timestamp);
-  
+  getToBottom();
 });
  
 // Listen online state var userRef = firebase.database().ref("presence/" + uid);
@@ -347,13 +363,19 @@ firebase.auth().onAuthStateChanged(function(user) {
   userState.on('child_added', function(childSnapshot, prevChildKey) {
      
     console.log("This Id is login "+ childSnapshot.key);
-     
      avartarOnline(childSnapshot.key);
 
+      if(childSnapshot.key!=uid){
+      getUserName(childSnapshot.key).then(function(result){notification(result +" Is Online ");});
+      }else{
+
+        notification("Connected");
+      }
 });
 userState.on('child_removed', function(childSnapshot) {
   console.log("This Id is logoff  "+ childSnapshot.key);
   avartarOffline(childSnapshot.key);
+   getUserName(childSnapshot.key).then(function(result){notification(result +" Is Offline ");});
 });
 
 
@@ -362,7 +384,7 @@ userState.on('child_removed', function(childSnapshot) {
 
 function avartarOnline(uid){
   $('.'+uid).each(function(i, obj) {
-    obj.style="border-color:green;";
+    obj.style="border-color:#4CAF50;";
 });
 
 }
@@ -405,13 +427,13 @@ function CreateNewUser(){
 
 var user = firebase.auth().currentUser;
 
-if (user) {
+ 
   // User is signed in.
 
 
-
+  
  
-if (user != null) {
+if (user !=null) {
   name = user.displayName;
   email = user.email;
   photoUrl = user.photoURL;
@@ -424,7 +446,7 @@ writeUserData(uid, name, email, photoUrl);
   console.log(email);
   console.log(photoUrl);
   console.log("UID :"+uid);
-}
+
 } else {
   // No user is signed in.
   console.log("User not login")
@@ -461,17 +483,7 @@ writeUserData(uid, name, email, photoUrl);
   }
  //MODAL
 
-// MESAAGE
-function getLastMessage() {
-   refMessages.limitToLast(1).on('child_added', function (snapshot) 
-   {
-       var data = snapshot.val();
-       $('#hf_lastfid').val(data.fbid);
-       $('#hf_lastdir').val(data.dir);
-   });
-}
-
-
+ 
 function getUserAvatar(UID) {
 
  
@@ -484,38 +496,47 @@ function getUserAvatar(UID) {
 });
 }
 
-
+/*
 function getUserName(UID) {
-  firebase.database().ref('/users/' + UID).once('value').then(function(snapshot) {
-  return snapshot.val().username;
+  firebase.database().ref('users/' + UID).once('value').then(function(snapshot) {
+  let name = snapshot.val().username;
+  return  name;
 });
+}
+*/
+
+
+//promise 
+let getUserName = function(UID){
+  let getUserNamePromise = new Promise(function(resolve, reject) {
+
+      firebase.database().ref('users/' + UID).once('value').then(function(snapshot) {
+        filteredObj = snapshot.val().username;
+        resolve(filteredObj);
+
+      });
+     });
+     return getUserNamePromise;
 }
 
 
 
-function getPost(){
 
 
-var ref = firebase.database().ref("chat/room1/");
-ref.orderByKey().limitToLast(50).on("child_added", function(snapshot) {
 
+
+
+// SnackBar
+
+function notification(msg) {
+  'use strict';
+  
+  var snackbarContainer = document.querySelector('#demo-toast-example');
+   
+    var data = {message: msg};
+    snackbarContainer.MaterialSnackbar.showSnackbar(data);
  
-  /*
-  console.log(snapshot.key);
-  console.log(snapshot.val().message);
-  console.log(snapshot.val().uid);
- */
- 
- 
- appendMessage(snapshot.val().message,snapshot.val().appendMessage,snapshot.val().uid,snapshot.val().name, snapshot.val().timestamp);
-
-});
-
-
-
-}
-
-
+};
 
 
   // [START get_messaging_object]
@@ -553,9 +574,9 @@ var sendtData = {
   updates['/chat/'+'room1/' + newPostKey] = sendtData;
  
    firebase.database().ref().update(updates);
-   getToBottom();
+   //getToBottom();
  
-   
+   getToBottom();
 }
 
  
@@ -653,7 +674,7 @@ function getDocHeight(){
 
 
 function getToBottom(){
-    $('.mdl-layout__content').animate({ scrollTop: getDocHeight() }, 'slow');
+    $('.mdl-layout__tab-panel').animate({ scrollTop: getDocHeight() }, 'slow');
 }
 
 
