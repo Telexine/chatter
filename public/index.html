@@ -90,21 +90,8 @@ limitations under the License.
   </div>
   <main class="mdl-layout__content"  >
     <section class="mdl-layout__tab-panel is-active" id="fixed-tab-1"style="overflow-x: scroll;">
-      <div class="page-content" ><!-- Your content goes here -->
+      <div class="page-content" onclick="$('#inputMsg').focus(); " > <!-- Your content goes here -->
       
-
-
-
-
-      <!-- DEBUG  FACEBOOK 
-       <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
-
-        <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
-      <button type="button" class="mdl-button" onclick="ShowLogin()">FaceBook</button>
-       
-          </div>
-
-      -->
       
       <!-- MDL Spinner Component -->
 <center><div style="float:none;top: 50%;position: absolute;"class="mdl-spinner mdl-js-spinner is-active"></div> </center> 
@@ -143,10 +130,10 @@ limitations under the License.
     bottom: 0;overflow:hidden;position:fixed;right:0;
 ">
      <div style="margin:auto;right:0;">
-       <form  action="#">
+       <form action="#">
 
               <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width:80%">
-                <input class="mdl-textfield__input" type="text" id="inputMsg"  onkeydown="if (event.keyCode == 13) {  sendText();} "  >
+                <input class="mdl-textfield__input" type="text" id="inputMsg"  onkeydown="if (event.keyCode == 13) {  sendText();}"  >
                 <label class="mdl-textfield__label" for="sample3">Type Here...</label>
          
               </div>
@@ -312,7 +299,7 @@ var provider = new firebase.auth.FacebookAuthProvider();
  // Check Logion State
 
 firebase.auth().onAuthStateChanged(function(user) {
-  
+  $('#inputMsg').focus();
   console.log("onAuthStateChanged");
   if (user) {
     // User is signed in.  Refresh
@@ -329,12 +316,7 @@ firebase.auth().onAuthStateChanged(function(user) {
       var userRef = firebase.database().ref("presence/" + uid);
       amOnline.on('value', function(snapshot) {
         if (snapshot.val()) {
-
-          //userRef.onDisconnect().remove();
-           
           userRef.onDisconnect().remove();
-           
- 
           userRef.set(true);
         }
       });
@@ -365,11 +347,12 @@ function stopLoading(){
   getToBottom();
 });
  
-// Listen online state var userRef = firebase.database().ref("presence/" + uid);
+
+
+// Listen online state 
   var userState = firebase.database().ref("presence/");
   
   userState.on('child_added', function(childSnapshot, prevChildKey) {
-     
     console.log("This Id is login "+ childSnapshot.key);
      avartarOnline(childSnapshot.key);
     
@@ -421,11 +404,6 @@ var user = firebase.auth().currentUser;
 
  //document.getElementById('fixed-tab-1').style.height = '"'+getDocHeight()-(bottomBoxH+headerH)+'px"';
  $('#fixed-tab-1').height( getDocHeight()-(bottomBoxH+headerH) );
- 
- // NEED TO PUT THIS OUT !!
- 
- ///
-
 
  getToBottom();
  }
@@ -436,11 +414,7 @@ function CreateNewUser(){
 var user = firebase.auth().currentUser;
 
  
-  // User is signed in.
-
-
-  
- 
+  // User is signed 
 if (user !=null) {
   name = user.displayName;
   email = user.email;
@@ -492,32 +466,25 @@ writeUserData(uid, name, email, photoUrl);
  //MODAL
 
  
-function getUserAvatar(UID) {
-
+ 
  
 
- 
-  firebase.database().ref('/users/' + UID).once('value').then(function(snapshot) {
-    let URL = snapshot.val().profile_picture;
-   console.log(URL);
-  return URL;
-});
+
+let getUserAvatar =function(UID){
+  let getUserAvatarPromise = new Promise (function(resolve,reject){
+    firebase.database().ref('users/'+UID).once('value').then(function(snapshop){
+      resolve(result);
+    });
+  });
+  return getUserAvatarPromise;
 }
 
-/*
-function getUserName(UID) {
-  firebase.database().ref('users/' + UID).once('value').then(function(snapshot) {
-  let name = snapshot.val().username;
-  return  name;
-});
-}
-*/
 
 
-//promise 
+// Promise
+
 let getUserName = function(UID){
   let getUserNamePromise = new Promise(function(resolve, reject) {
-
       firebase.database().ref('users/' + UID).once('value').then(function(snapshot) {
         filteredObj = snapshot.val().username;
         resolve(filteredObj);
@@ -630,7 +597,7 @@ function GET_Permission() {
  .then(function(currentToken) {
   if (currentToken) {
    console.log("currentToken", currentToken);
-   //$("#token").html(currentToken);
+ 
   } else {
    // Show permission request.
    console.log("No Instance ID token available. Request permission to generate one.");
@@ -682,7 +649,11 @@ function getDocHeight(){
 
 
 function getToBottom(){
-    $('.mdl-layout__tab-panel').animate({ scrollTop: getDocHeight() }, 'slow');
+
+
+
+  
+    $('.mdl-layout__tab-panel').animate({ scrollTop: $(".page-content").outerHeight() }, 'slow');
 }
 
 
@@ -710,7 +681,6 @@ function getToBottom(){
 
     //create message
     const dataAvartar =document.createElement('img');
-    const dataHeaderElement = document.createElement('h5');
     const dataElement = document.createElement('pre');
 
 
