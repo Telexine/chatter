@@ -92,12 +92,10 @@ limitations under the License.
     <section class="mdl-layout__tab-panel is-active" id="fixed-tab-1"style="overflow-x: scroll;">
       <div class="page-content" onclick="$('#inputMsg').focus(); " > <!-- Your content goes here -->
       
-      
+
       <!-- MDL Spinner Component -->
 <center><div style="float:none;top: 50%;position: absolute;"class="mdl-spinner mdl-js-spinner is-active"></div> </center> 
          <div id="messages" >
-
-
           </div>
  
  
@@ -127,7 +125,7 @@ limitations under the License.
 
       
    <div id="bottomBox"class="SendBox" style="display:block;  
-    bottom: 0;overflow:hidden;position:fixed;right:0;
+    bottom: 0;overflow:hidden;position:fixed;right:0;background:white;
 ">
      <div style="margin:auto;right:0;">
        <form action="#">
@@ -359,7 +357,6 @@ function stopLoading(){
       if(childSnapshot.key!=uid){
       getUserName(childSnapshot.key).then(function(result){notification(result +" Is Online ");});
       }else{
-
         notification("Connected");
       }
 });
@@ -401,11 +398,9 @@ var user = firebase.auth().currentUser;
 
  let headerH = document.getElementById('header').offsetHeight;
  console.log(getDocHeight()-(bottomBoxH+headerH));
-
- //document.getElementById('fixed-tab-1').style.height = '"'+getDocHeight()-(bottomBoxH+headerH)+'px"';
+ 
  $('#fixed-tab-1').height( getDocHeight()-(bottomBoxH+headerH) );
-
- getToBottom();
+ 
  }
 
 
@@ -432,6 +427,7 @@ writeUserData(uid, name, email, photoUrl);
 } else {
   // No user is signed in.
   console.log("User not login")
+  resetUI();
   ShowLogin();
 }
 }
@@ -505,9 +501,8 @@ let getUserName = function(UID){
 
 function notification(msg) {
   'use strict';
-  
   var snackbarContainer = document.querySelector('#demo-toast-example');
-   
+  
     var data = {message: msg};
     snackbarContainer.MaterialSnackbar.showSnackbar(data);
  
@@ -550,8 +545,7 @@ var sendtData = {
  
    firebase.database().ref().update(updates);
    //getToBottom();
- 
-   getToBottom();
+  
 }
 
  
@@ -649,11 +643,7 @@ function getDocHeight(){
 
 
 function getToBottom(){
-
-
-
-  
-    $('.mdl-layout__tab-panel').animate({ scrollTop: $(".page-content").outerHeight() }, 'slow');
+    $('.mdl-layout__tab-panel').animate({ scrollTop: $(".page-content").outerHeight() }, 'fast');
 }
 
 
@@ -687,47 +677,24 @@ function getToBottom(){
     let user = firebase.auth().currentUser;
     // add class 
 
-    dataDivElement.className = "chatCard";
-    datarightTopElement.className ="top";
+    dataDivElement.className = " mdl-grid chatCard ";
+
+     
+      // align right
+   //dataleftElement.className= "curChatleftCard";
+    dataleftElement.className= "mdl-cell mdl-cell--2-col  mdl-cell--1-col-tablet mdl-cell--1-col-phone  ";
+    datarightElement.className= "mdl-cell mdl-cell--10-col  mdl-cell--3-col-tablet mdl-cell--3-col-phone  chatright ";
+    datarightTopElement.className =" mdl-cell mdl-cell--12-col  mdl-cell--12-col-tablet mdl-cell--12-col-phone top ";
     
-
-
-    if(user.uid==uid){
-
- 
-    dataleftElement.className= "curChatleftCard";
-    datarightTopElement.className ="curTop";
-    datarightElement.className= "chatrightCard";
-    datarightBottomElement.className ="curBottom";
+    //datarightElement.className= "chatrightCard";
+    datarightBottomElement.className =" mdl-cell  mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-phone bottom ";
 
     //int 
      datarightBottomElement.textContent= message;
-  }else{
-    datarightTopElement.className ="top";
-    datarightBottomElement.className ="bottom";
-    dataleftElement.className= "chatleftCard";
-    datarightElement.className= "chatrightCard";
-
-    //init
-       datarightBottomElement.textContent= message;
-
-  }
-  
-
-    //init Avatar
-    dataAvartar.className="avatar "+uid;
-    dataAvartar.src=avatar;
-    
-    datarightTopElement.textContent="from "+name+" on " +date;
-      
-
-    dataElement.style = 'overflow-x:hidden;'
-    //dataHeaderElement.textContent = 'Received message: on '+date;
-    dataElement.textContent =  message;
-    
 
 
-    //append Body
+ 
+     //append Body
     datarightElement.appendChild(datarightTopElement);
     datarightElement.appendChild(datarightBottomElement);
     dataleftElement.appendChild(dataAvartar);
@@ -735,6 +702,18 @@ function getToBottom(){
     dataDivElement.appendChild(datarightElement);
     messagesElement.appendChild(dataDivElement);
  
+
+    //init Avatar
+    dataAvartar.className="mdl-cell mdl-cell--12-col  mdl-cell--12-col-tablet mdl-cell--12-col-phone avatar "+uid;
+    dataAvartar.src=avatar;
+    
+    datarightTopElement.textContent="from "+name+" on " +date;
+    dataElement.style = 'overflow-x:hidden;'
+    //dataHeaderElement.textContent = 'Received message: on '+date;
+    dataElement.textContent =  message;
+    
+
+
 
     //append Messgage
     //datarightBottomElement.appendChild(dataElement);

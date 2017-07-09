@@ -51,8 +51,7 @@ h3 {
   margin: 3px 5px 3px 5px;  
 
 }
-
-
+ 
 .SendBox{
 
   width: 90%;
@@ -67,44 +66,41 @@ h3 {
 
 
 .chatCard{
-
-  margin: 5px 5px 5px 5px;
-   
-  padding-bottom: 30px;
+   padding-bottom: 30px;
 }
 
 .chatCard .avatar{
 
-  border-radius: 500px 500px 500px 500px;
-    border: 1px solid white;
-    width: 40%;
-
-
-}
- 
-
-.chatCard  .chatleftCard{
-  float:left;
-} 
-
-.chatCard  .curChatleftCard {
-  float:right;
+    border-radius: 50%;
+    border: 2px solid white;
+    bottom: 2px;
+    
 }
 
-.chatCard  .chatrightCard{
+
+.chatCard .chatright{
+    position: relative;
+    white-space: pre-wrap;
+}
   
-
-}
-.chatCard .top{
+.chatCard .chatright .top{
+    text-align: left;
     font-size: .8em;
     color: gray;
-}
-.chatCard .curTop{
-    text-align: right;
-    font-size: .8em;
-    color: gray;
+    position: relative;
+    white-space: pre;
 }
 
+.chatCard .chatright .bottom{
+    clear: left;
+    float: left;
+    word-wrap: break-word;
+
+}
+
+
+
+ 
 .chatCard .bottom{
  font-size: 1.3em;
 }
