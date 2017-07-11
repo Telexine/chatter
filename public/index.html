@@ -16,724 +16,654 @@ limitations under the License.
 -->
 <html>
 <head>
-  <meta charset=utf-8 />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Firebase Cloud Messaging </title>
-
-  <!-- Material Design Theming -->
-
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
-
-  <link rel="stylesheet" href="main.css" type="text/css">
-   <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue-indigo.min.css" /> 
- <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+	<meta charset="utf-8">
+	<meta content="width=device-width, initial-scale=1.0" name="viewport">
+	<title>Firebase Cloud Messaging</title><!-- Material Design Theming -->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<script defer src="https://code.getmdl.io/1.1.3/material.min.js">
+	</script>
+	<link href="main.css" rel="stylesheet" type="text/css">
+	<link href="https://code.getmdl.io/1.3.0/material.blue-indigo.min.css" rel="stylesheet">
+	<link href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet" type="text/css">
 </head>
 <body>
- 
-  
- <!--   login   Div  -->
-
-
-<dialog class="mdl-dialog">
-    <div class="mdl-dialog__content">
-      <p>
-             <!-- <a href="#"onclick="firebase.auth().signInWithPopup(provider)">LOGIN</a> -->
-      </p>
-    </div>
-
-     <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
-
-        <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
-      <button type="button" class="mdl-button fblogin">Login with FB</button>
-      <button type="button" class="mdl-button close">Cancel</button>
-    </div>
-
-
-    </div>
-
-    
-  </dialog>
-
-
- <!--    End login    -->
-
-
-
-
-
-
-
-
-<!-- Simple header with fixed tabs. -->
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header  
-            mdl-layout--fixed-tabs" >
-  <header class="mdl-layout__header " id="header" >
-    <div class="mdl-layout__header-row">
-      <!-- Title -->
-      <span class="mdl-layout-title">Firebase Cloud Messaging</span>
-    </div>
-    <!-- Tabs -->
-    <div class="mdl-layout__tab-bar mdl-js-ripple-effect  ">
-      <a href="#fixed-tab-1" class="mdl-layout__tab is-active">Chat</a>
-      <a href="#fixed-tab-2" class="mdl-layout__tab">Room</a>
-      <a href="#fixed-tab-3" class="mdl-layout__tab">Setting</a>
-    </div>
-  </header>
-  <div class="mdl-layout__drawer">
-    <span class="mdl-layout-title">User:    
-
-      <img id="imavatar"  src="#">
-      <br>
-     <span class="mdl-layout-title" id="uname">    
-    </span>
-    
-  </div>
-  <main class="mdl-layout__content"  >
-    <section class="mdl-layout__tab-panel is-active" id="fixed-tab-1"style="overflow-x: scroll;">
-      <div class="page-content"   > <!-- Your content goes here -->
-      
-
-      <!-- MDL Spinner Component -->
-<center><div style="float:none;top: 50%;position: absolute;"class="mdl-spinner mdl-js-spinner is-active"></div> </center> 
-         <div id="messages" >
-          </div>
- 
- 
- 
-      
-
-      
-   <div id="bottomBox"class="SendBox" style="display:block;  
-    bottom: 0;overflow:hidden;position:fixed;right:0;background:white;
-">
-<!-- Large Tooltip -->
-
-     <div style="margin:auto;right:0;">
-       <form action="#">
-          
-              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width:80%">
-                <input class="mdl-textfield__input" type="text" id="inputMsg"  onkeydown="if (event.keyCode == 13) {  sendText();}"  >
-                <label class="mdl-textfield__label" for="sample3">Type Here...</label>
-         
-              </div>
-              <button onclick=sendText(); class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-              SEND
-            </button>
-            </form>
-              </div>
-  </div>
-  
-  
-
-
-
-  
-      
-      <!-- PAGE 1 -->
-      </div>
-    </section>
-    <section class="mdl-layout__tab-panel" id="fixed-tab-2">
-      <div class="page-content"><!-- Your content goes here --></div>
-    </section>
-    <section class="mdl-layout__tab-panel" id="fixed-tab-3">
-      <div class="page-content"><!-- Your content goes here --></div>
-    </section>
-  </main>
-  
-
-
-
-<!-- Toast Notification  -->
- 
-<div id="demo-toast-example" class="mdl-js-snackbar mdl-snackbar">
-  <div class="mdl-snackbar__text"></div>
-  <button class="mdl-snackbar__action" type="button"></button>
-</div>
-
-</body>
-
-
-  
-</div>
- 
-<!-- Import and configure the Firebase SDK -->
-<!-- These scripts are made available when the app is served or deployed on Firebase Hosting -->
-<!-- If you do not serve/host your project using Firebase Hosting see https://firebase.google.com/docs/web/setup -->
-<script src="/__/firebase/3.9.0/firebase-app.js"></script>
-<script src="/__/firebase/3.9.0/firebase.js"></script>
-<script src="/__/firebase/init.js"></script>
-<script
-  src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-  integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
-  crossorigin="anonymous"></script>
- 
-<script src="/firebase-messageing-sw.js" type="text/javasctipt"></script>
-
-
-
-<script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
-<script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyDHQxlgQ7hXW8m6okxMQHjmUxKtEwcdUc0",
-    authDomain: "chatter-f3d2d.firebaseapp.com",
-    databaseURL: "https://chatter-f3d2d.firebaseio.com",
-    projectId: "chatter-f3d2d",
-    storageBucket: "chatter-f3d2d.appspot.com",
-    messagingSenderId: "659586777397"
-  };
-  firebase.initializeApp(config);
-  let  name ,email,photoUrl,uid;
-
-  // Innitialize FaceBook
-var provider = new firebase.auth.FacebookAuthProvider();
-    //provider.addScope('user_birthday');
- provider.addScope('user_birthday');
- 
- // Check Logion State
-
-firebase.auth().onAuthStateChanged(function(user) {
-  $('#inputMsg').focus();
-  console.log("onAuthStateChanged");
-  if (user) {
-    // User is signed in.  Refresh
-      name = user.displayName;
-      email = user.email;
-      photoUrl = user.photoURL;
-      uid = user.uid;  
-
-        // hot fix 
-        CreateNewUser();
-
-      //This User Is Online
-      var amOnline = firebase.database().ref(".info/connected");
-      var userRef = firebase.database().ref("presence/" + uid);
-      amOnline.on('value', function(snapshot) {
-        if (snapshot.val()) {
-          userRef.onDisconnect().remove();
-          userRef.set(true);
-        }
-      });
-
-
-
-
-    resetUI();
-  } else {
-    ShowLogin();
-  }
-});
-
-function stopLoading(){
-    $(".mdl-spinner").removeClass("is-active");
- 
-}
-
-// =====   Listening   ======
-
-// Listening On chat 
-  var Rref = firebase.database().ref("chat/room1/");
-  Rref.orderByKey().limitToLast(10).on('child_added', function(childSnapshot, prevChildKey) {
- 
- appendMessage(childSnapshot.val().message,childSnapshot.val().uAvartar,childSnapshot.val().uid,childSnapshot.val().name, childSnapshot.val().timestamp);
-  //hotfix
-  stopLoading();
-  getToBottom();
-});
- 
-
-
-// Listen online state 
-  var userState = firebase.database().ref("presence/");
-  
-  userState.on('child_added', function(childSnapshot, prevChildKey) {
-    console.log("This Id is login "+ childSnapshot.key);
-     avartarOnline(childSnapshot.key);
-    
-      if(childSnapshot.key!=uid){
-      getUserName(childSnapshot.key).then(function(result){notification(result +" Is Online ");});
-      }else{
-        notification("Connected");
-      }
-});
-userState.on('child_removed', function(childSnapshot) {
-  console.log("This Id is logoff  "+ childSnapshot.key);
-  avartarOffline(childSnapshot.key);
-   getUserName(childSnapshot.key).then(function(result){notification(result +" Is Offline ");});
-});
-
-
-
-//get Post 
-
-function avartarOnline(uid){
-  $('.'+uid).each(function(i, obj) {
-    obj.style="border-color:#4CAF50;";
-});
-
-}
-
-function avartarOffline(uid){
-  $('.'+uid).each(function(i, obj) {
-    obj.style="border-color:white;";
-});
-
-}
-
-function resetUI( ){
-
-var user = firebase.auth().currentUser;
-
- $("#imavatar").attr("src",user.photoURL);
- $("#uname").text(user.displayName);
- 
-
-
-
- let bottomBoxH = document.getElementById('bottomBox').offsetHeight;
-
- let headerH = document.getElementById('header').offsetHeight;
- console.log(getDocHeight()-(bottomBoxH+headerH));
- 
- $('#fixed-tab-1').height( getDocHeight()-(bottomBoxH+headerH) );
- 
- }
-
-
-function CreateNewUser(){
-
-var user = firebase.auth().currentUser;
-
- 
-  // User is signed 
-if (user !=null) {
-  name = user.displayName;
-  email = user.email;
-  photoUrl = user.photoURL;
-  uid = user.uid;  // The user's ID, unique to the Firebase project. Do NOT use
-                   // this value to authenticate with your backend server, if
-                   // you have one. Use User.getToken() instead.
-writeUserData(uid, name, email, photoUrl);
- 
-  console.log(name);
-  console.log(email);
-  console.log(photoUrl);
-  console.log("UID :"+uid);
-
-} else {
-  // No user is signed in.
-  console.log("User not login")
-  resetUI();
-  ShowLogin();
-}
-}
-
- function debug(){
-//firebase.auth().currentUse.accessToken.querySelector(email)
-   $('html,body').animate({scrollTop: document.body.scrollHeight},"fast");
- }
- 
-  // MODAL
-  
- 
-    var dialog = document.querySelector('dialog');
-    var showModalButton = document.querySelector('.show-modal');
-    if (! dialog.showModal) {
-      dialogPolyfill.registerDialog(dialog);
-    }
-    dialog.querySelector('.fblogin').addEventListener('click', function() {
-      firebase.auth().signInWithPopup(provider);
-      debug();
-      dialog.close();
-      CreateNewUser();
-    });
-    dialog.querySelector('.close').addEventListener('click', function() {
-      dialog.close();
-    });
-  
-
-  function ShowLogin(){
-    dialog.showModal();
-  }
- //MODAL
-
- 
- 
- 
-
-
-let getUserAvatar =function(UID){
-  let getUserAvatarPromise = new Promise (function(resolve,reject){
-    firebase.database().ref('users/'+UID).once('value').then(function(snapshop){
-      resolve(result);
-    });
-  });
-  return getUserAvatarPromise;
-}
-
-
-
-// Promise
-
-let getUserName = function(UID){
-  let getUserNamePromise = new Promise(function(resolve, reject) {
-      firebase.database().ref('users/' + UID).once('value').then(function(snapshot) {
-        filteredObj = snapshot.val().username;
-        resolve(filteredObj);
-
-      });
-     });
-     return getUserNamePromise;
-}
-
-
-
-
-
-
-
-
-// SnackBar
-
-function notification(msg) {
-  'use strict';
-  var snackbarContainer = document.querySelector('#demo-toast-example');
-  
-    var data = {message: msg};
-    snackbarContainer.MaterialSnackbar.showSnackbar(data);
- 
-};
-
-
-  // [START get_messaging_object]
-  // Retrieve Firebase Messaging object.
-  const messaging = firebase.messaging();
- 
-function sendText(){
-
-
-  var rootRef = firebase.database().ref();
-  var storesRef = rootRef.child('chat/room1');
-  var newStoreRef = storesRef.push();
-  
-  let txtMsg  = document.getElementById("inputMsg").value;
-   if(txtMsg==null||txtMsg==""){return}
-
-var sendtData = {
-    uid: uid,
-    uAvartar: photoUrl,
-    name:name,
-    message: txtMsg,
-    timestamp: firebase.database.ServerValue.TIMESTAMP
-  };
-
-
-
-  document.getElementById("inputMsg").value="";
-
-
-
-  var newPostKey = firebase.database().ref().child('chat').child('room1').push().key;
-
-  // Write the new post's data simultaneously in the posts list and the user's post list.
-  var updates = {};
-  updates['/chat/'+'room1/' + newPostKey] = sendtData;
- 
-   firebase.database().ref().update(updates);
-   //getToBottom();
-  
-}
-
- 
-
-function Uppic(Title,image){
-
-
-}
-
-
-function GET_Permission() {
-  messaging.requestPermission()
-  .then(function() {
-  console.log("Notification permission granted.");
-   // TODO(developer): Retrieve a Instance ID token for use with FCM.
-   // …
-  })
-  .catch(function(err) {
-   console.log("Unable to get permission to notify. ", err);
-  });
- }
-
-
-  // [START receive_message]
-  // Handle incoming messages. Called when:
-  // - a message is received while the app has focus
-  // - the user clicks on an app notification created by a sevice worker
-  //   `messaging.setBackgroundMessageHandler` handler.
-  messaging.onMessage(function(payload) {
-    console.log("Message received. ", payload);
-    // [START_EXCLUDE]
-    // Update the UI to include the received message.
-    appendMessage(payload);
-    // [END_EXCLUDE]
-  });
-  // [END receive_message]
-
-
-  function showToken() {
- // Get Instance ID token. Initially this makes a network call, once retrieved
- // subsequent calls to getToken will return from cache.
- messaging.getToken()
- .then(function(currentToken) {
-  if (currentToken) {
-   console.log("currentToken", currentToken);
- 
-  } else {
-   // Show permission request.
-   console.log("No Instance ID token available. Request permission to generate one.");
-  // $("#token").html("foo");
-  }
- })
- .catch(function(err) {
-  console.log("An error occurred while retrieving token. ", err);
- });
-}
-messaging.onTokenRefresh(function() {
- messaging.getToken()
- .then(function(refreshedToken) {
-  console.log("Token refreshed.");
-  //$(“#token”).html(refreshedToken);
- })
- .catch(function(err) {
-  console.log("Unable to retrieve refreshed token ", err);
- });
-});
- 
-
- messaging.onMessage(function(payload) {
- console.log("Message received. ", payload);
-});
-
-
-  function showHideDiv(divId, show) {
-    const div = document.querySelector('#' + divId);
-    if (show) {
-      div.style = "display: visible";
-    } else {
-      div.style = "display: none";
-    }
-  }
-  
-
-
-function getDocHeight(){
-
-      var body = document.body,
-      html = document.documentElement;
-
-
-  return Math.max( body.scrollHeight, body.offsetHeight, 
-                       html.clientHeight, html.scrollHeight, html.offsetHeight );
-
-}
-
-
-function getToBottom(){
-    $('.mdl-layout__tab-panel').animate({ scrollTop: $(".page-content").outerHeight() }, 'fast');
-}
-
-
-  // Add a message to the messages element.
-  function appendMessage(message,avatar,uid,name,timestamp) {
-
-    let date = new Date(timestamp);
-    date = date.getDate() + '/' + (date.getMonth()) + '/' + date.getFullYear()+"  "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
-    // generate Uniq ID
-    let UniqID = new Date().valueOf()+uid;
-
-    /*
-<h5>Received message: on 4/7/2017  20:43:1</h5>
-<pre style="overflow-x: hidden;">ddddd</pre>
-    */
-
-
-
- 
-    //create Body
-    const messagesElement = document.querySelector('#messages');
-    const dataDivElement = document.createElement('div');
-    const dataleftElement = document.createElement('div');
-    const datarightElement = document.createElement('div');
-    const dateBox = document.createElement('div');
-    const msgBoxElement =document.createElement('div');
-
-    const datarightTopElement = document.createElement('div');
-    const datarightBottomElement = document.createElement('div');
-
-
-    //create message
-    const dataAvartar =document.createElement('img');
-    const dataElement = document.createElement('pre');
-
-
-    let user = firebase.auth().currentUser;
-
-
-    // add class 
-
-    dataDivElement.className = " mdl-grid chatCard ";
-    
-
-      
-      // align right
-   //dataleftElement.className= "curChatleftCard";
-    dataleftElement.className= "mdl-cell mdl-cell--2-col  mdl-cell--1-col-tablet mdl-cell--1-col-phone  ";
-    datarightElement.className= "mdl-cell mdl-cell--10-col  mdl-cell--3-col-tablet mdl-cell--3-col-phone  chatright ";
-    datarightTopElement.className ="mdl-cell mdl-cell--12-col  mdl-cell--12-col-tablet mdl-cell--12-col-phone top ";
-    
-    //datarightElement.className= "chatrightCard";
-    datarightBottomElement.className =" mdl-cell  mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-phone bottom ";
-
-    msgBoxElement.className=" msgBox "
-    //int metadata 
-     datarightBottomElement.textContent = message;
-     dataDivElement.id = UniqID;
-     dateBox.className ="mdl-tooltip mdl-tooltip--large"; 
-     dateBox.setAttribute("data-mdl-for",UniqID);
-
-     dateBox.textContent=date;
-
-    if(user.uid==uid){
-      datarightTopElement.className +=" textRight ";
-       datarightBottomElement.className +=" textRight ";
-       msgBoxElement.className +=" Fr ";
-         //append Body
-    datarightElement.appendChild(datarightTopElement);
-    msgBoxElement.appendChild(datarightBottomElement);
-    datarightElement.appendChild(msgBoxElement);
-    
-    dataleftElement.appendChild(dataAvartar);
-    dataDivElement.appendChild(datarightElement);
-    dataDivElement.appendChild(dataleftElement);
-    messagesElement.appendChild(dataDivElement);
-
-
-    }else{
-
-   
-      datarightTopElement.className +=" textLeft ";
-       datarightBottomElement.className +=" textLeft ";
-       msgBoxElement.className +=" Fl ";
-     //append Body
-    datarightElement.appendChild(datarightTopElement);
-    msgBoxElement.appendChild(datarightBottomElement);
-    datarightElement.appendChild(msgBoxElement);
-    
-    dataleftElement.appendChild(dataAvartar);
-    dataDivElement.appendChild(dataleftElement);
-    dataDivElement.appendChild(datarightElement);
-    messagesElement.appendChild(dataDivElement);
-    messagesElement.appendChild(dateBox);
-    }
-
-    //init Avatar
-    dataAvartar.className="mdl-cell mdl-cell--8-col  mdl-cell--12-col-tablet mdl-cell--12-col-phone avatar "+uid;
-    dataAvartar.src=avatar;
-    
-
-    //init Message
-    datarightTopElement.textContent=" "+name;
-
-/*
-
-
-<span id="tt2" class="">asdasdasdsa</span>
-<div class="mdl-tooltip mdl-tooltip--large" for="tt2">
-Print
-</div>
-
-*/
-    
-    //" on " +date;
-    dataElement.style = 'overflow-x:hidden;'
-    //dataHeaderElement.textContent = 'Received message: on '+date;
- 
-
-
-
-    //append Messgage
-    //datarightBottomElement.appendChild(dataElement);
-  }
-
-
-// ADD USER DATA
-function writeUserData(userId, name, email, avatar) {
-  firebase.database().ref('users/' + userId).set({
-    username: name,
-    email: email,
-    profile_picture : avatar,
-  });
-}
-
-
-function writeNewPost(uid, username, picture, title, body) {
-  // A post entry.
-  var postData = {
-    author: username,
-    uid: uid,
-    body: body,
-    title: title,
-    starCount: 0,
-    authorPic: picture
-  };
-
-  // Get a key for a new Post.
-  var newPostKey = firebase.database().ref().child('posts').push().key;
-
-  // Write the new post's data simultaneously in the posts list and the user's post list.
-  var updates = {};
-  updates['/posts/' + newPostKey] = postData;
-  updates['/user-posts/' + uid + '/' + newPostKey] = postData;
-
-  return firebase.database().ref().update(updates);
-}
-
-  function checkConnection() {
-        
-        try {
-             firebase.checkConnection();
-         
-            firebase.InitData();
-        } catch (error) {
-            console.log('Data Service error:' + error);
-        }
-    }
- 
-
-
-  // Clear the messages element of all children.
-  function clearMessages() {
-    const messagesElement = document.querySelector('#messages');
-    while (messagesElement.hasChildNodes()) {
-      messagesElement.removeChild(messagesElement.lastChild);
-    }
-  }
-
-  function updateUIForPushEnabled(currentToken) {
-    showHideDiv(tokenDivId, true);
-    showHideDiv(permissionDivId, false);
-    showToken(currentToken);
-  }
-
-  function updateUIForPushPermissionRequired() {
-    showHideDiv(tokenDivId, false);
-    showHideDiv(permissionDivId, true);
-  }
- 
-  //resetUI();
-</script>
-
-<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	<!--   login   Div  -->
+	<dialog class="mdl-dialog">
+		<div class="mdl-dialog__content">
+			<p><!-- <a href="#"onclick="firebase.auth().signInWithPopup(provider)">LOGIN</a> --></p>
+		</div>
+		<div class="mdl-dialog__actions mdl-dialog__actions--full-width">
+			<div class="mdl-dialog__actions mdl-dialog__actions--full-width">
+				<button class="mdl-button fblogin" type="button">Login with FB</button> <button class="mdl-button close" type="button">Cancel</button>
+			</div>
+		</div>
+	</dialog><!--    End login    -->
+	<!-- Simple header with fixed tabs. -->
+	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
+		<header class="mdl-layout__header" id="header">
+			<div class="mdl-layout__header-row">
+				<!-- Title -->
+				<span class="mdl-layout-title">Firebase Cloud Messaging</span>
+			</div><!-- Tabs -->
+			<div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+				<a class="mdl-layout__tab is-active" href="#fixed-tab-1">Chat</a> <a class="mdl-layout__tab" href="#fixed-tab-2">Room</a> <a class="mdl-layout__tab" href="#fixed-tab-3">Setting</a>
+			</div>
+		</header>
+		<div class="mdl-layout__drawer">
+			<span class="mdl-layout-title">User: <img id="imavatar" src="#"><br>
+			<span class="mdl-layout-title" id="uname"></span></span>
+		</div>
+		<main class="mdl-layout__content">
+			<section class="mdl-layout__tab-panel is-active" id="fixed-tab-1" style="overflow-x: scroll;">
+				<div class="page-content">
+					<!-- Your content goes here -->
+					<!-- MDL Spinner Component -->
+					<center>
+						<div class="mdl-spinner mdl-js-spinner is-active" style="float:none;top: 50%;position: absolute;"></div>
+					</center>
+					<div id="messages"></div>
+					<div class="SendBox" id="bottomBox" style="display:block; bottom: 0;overflow:hidden;position:fixed;right:0;background:white;">
+						<!-- Large Tooltip -->
+						<div style="margin:auto;right:0;">
+							<form action="#">
+								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width:80%">
+									<input class="mdl-textfield__input" id="inputMsg" onkeydown="if (event.keyCode == 13) { sendText();}" type="text"> <label class="mdl-textfield__label" for="sample3">Type Here...</label>
+								</div><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="sendText();">SEND</button>
+							</form>
+						</div>
+					</div><!-- PAGE 1 -->
+				</div>
+			</section>
+			<section class="mdl-layout__tab-panel" id="fixed-tab-2">
+				<div class="page-content">
+					<!-- Your content goes here -->
+				</div>
+			</section>
+			<section class="mdl-layout__tab-panel" id="fixed-tab-3">
+				<div class="page-content">
+					<!-- Your content goes here -->
+				</div>
+			</section>
+		</main><!-- Toast Notification  -->
+		<div class="mdl-js-snackbar mdl-snackbar" id="demo-toast-example">
+			<div class="mdl-snackbar__text"></div><button class="mdl-snackbar__action" type="button"></button>
+		</div>
+	</div><!-- Import and configure the Firebase SDK -->
+	<!-- These scripts are made available when the app is served or deployed on Firebase Hosting -->
+	<!-- If you do not serve/host your project using Firebase Hosting see https://firebase.google.com/docs/web/setup -->
+	<script src="/__/firebase/3.9.0/firebase-app.js">
+	</script> 
+	<script src="/__/firebase/3.9.0/firebase.js">
+	</script> 
+	<script src="/__/firebase/init.js">
+	</script> 
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js">
+	</script> 
+	<script src="/firebase-messageing-sw.js" type="text/javasctipt">
+	</script> 
+	<script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js">
+	</script> 
+	<script>
+	 // Initialize Firebase
+	 var config = {
+	   apiKey: "AIzaSyDHQxlgQ7hXW8m6okxMQHjmUxKtEwcdUc0",
+	   authDomain: "chatter-f3d2d.firebaseapp.com",
+	   databaseURL: "https://chatter-f3d2d.firebaseio.com",
+	   projectId: "chatter-f3d2d",
+	   storageBucket: "chatter-f3d2d.appspot.com",
+	   messagingSenderId: "659586777397"
+	 };
+	 firebase.initializeApp(config);
+	 let  name ,email,photoUrl,uid;
+
+	 // Innitialize FaceBook
+	var provider = new firebase.auth.FacebookAuthProvider();
+	   //provider.addScope('user_birthday');
+	provider.addScope('user_birthday');
+
+	// Check Logion State
+
+	firebase.auth().onAuthStateChanged(function(user) {
+	 $('#inputMsg').focus();
+	 console.log("onAuthStateChanged");
+	 if (user) {
+	   // User is signed in.  Refresh
+	     name = user.displayName;
+	     email = user.email;
+	     photoUrl = user.photoURL;
+	     uid = user.uid;  
+
+	       // hot fix 
+	       CreateNewUser();
+
+	     //This User Is Online
+	     var amOnline = firebase.database().ref(".info/connected");
+	     var userRef = firebase.database().ref("presence/" + uid);
+	     amOnline.on('value', function(snapshot) {
+	       if (snapshot.val()) {
+	         userRef.onDisconnect().remove();
+	         userRef.set(true);
+	       }
+	     });
+
+
+
+
+	   resetUI();
+	 } else {
+	   ShowLogin();
+	 }
+	});
+
+	function stopLoading(){
+	   $(".mdl-spinner").removeClass("is-active");
+
+	}
+
+	// =====   Listening   ======
+
+	// Listening On chat 
+	 var Rref = firebase.database().ref("chat/room1/");
+	 Rref.orderByKey().limitToLast(10).on('child_added', function(childSnapshot, prevChildKey) {
+
+	appendMessage(childSnapshot.val().message,childSnapshot.val().uAvartar,childSnapshot.val().uid,childSnapshot.val().name, childSnapshot.val().timestamp);
+	 //hotfix
+	 stopLoading();
+	 getToBottom();
+	});
+
+
+
+	// Listen online state 
+	 var userState = firebase.database().ref("presence/");
+	 
+	 userState.on('child_added', function(childSnapshot, prevChildKey) {
+	   console.log("This Id is login "+ childSnapshot.key);
+	    avartarOnline(childSnapshot.key);
+	   
+	     if(childSnapshot.key!=uid){
+	     getUserName(childSnapshot.key).then(function(result){notification(result +" Is Online ");});
+	     }else{
+	       notification("Connected");
+	     }
+	});
+	userState.on('child_removed', function(childSnapshot) {
+	 console.log("This Id is logoff  "+ childSnapshot.key);
+	 avartarOffline(childSnapshot.key);
+	  getUserName(childSnapshot.key).then(function(result){notification(result +" Is Offline ");});
+	});
+
+
+
+	//get Post 
+
+	function avartarOnline(uid){
+	 $('.'+uid).each(function(i, obj) {
+	   obj.style="border-color:#4CAF50;";
+	});
+
+	}
+
+	function avartarOffline(uid){
+	 $('.'+uid).each(function(i, obj) {
+	   obj.style="border-color:white;";
+	});
+
+	}
+
+	function resetUI( ){
+
+	var user = firebase.auth().currentUser;
+
+	$("#imavatar").attr("src",user.photoURL);
+	$("#uname").text(user.displayName);
+
+
+
+
+	let bottomBoxH = document.getElementById('bottomBox').offsetHeight;
+
+	let headerH = document.getElementById('header').offsetHeight;
+	console.log(getDocHeight()-(bottomBoxH+headerH));
+
+	$('#fixed-tab-1').height( getDocHeight()-(bottomBoxH+headerH) );
+
+	}
+
+
+	function CreateNewUser(){
+
+	var user = firebase.auth().currentUser;
+
+
+	 // User is signed 
+	if (user !=null) {
+	 name = user.displayName;
+	 email = user.email;
+	 photoUrl = user.photoURL;
+	 uid = user.uid;  // The user's ID, unique to the Firebase project. Do NOT use
+	                  // this value to authenticate with your backend server, if
+	                  // you have one. Use User.getToken() instead.
+	writeUserData(uid, name, email, photoUrl);
+
+	 console.log(name);
+	 console.log(email);
+	 console.log(photoUrl);
+	 console.log("UID :"+uid);
+
+	} else {
+	 // No user is signed in.
+	 console.log("User not login")
+	 resetUI();
+	 ShowLogin();
+	}
+	}
+
+	function debug(){
+	//firebase.auth().currentUse.accessToken.querySelector(email)
+	  $('html,body').animate({scrollTop: document.body.scrollHeight},"fast");
+	}
+
+	 // MODAL
+	 
+
+	   var dialog = document.querySelector('dialog');
+	   var showModalButton = document.querySelector('.show-modal');
+	   if (! dialog.showModal) {
+	     dialogPolyfill.registerDialog(dialog);
+	   }
+	   dialog.querySelector('.fblogin').addEventListener('click', function() {
+	     firebase.auth().signInWithPopup(provider);
+	     debug();
+	     dialog.close();
+	     CreateNewUser();
+	   });
+	   dialog.querySelector('.close').addEventListener('click', function() {
+	     dialog.close();
+	   });
+	 
+
+	 function ShowLogin(){
+	   dialog.showModal();
+	 }
+	//MODAL
+
+
+
+
+
+
+	let getUserAvatar =function(UID){
+	 let getUserAvatarPromise = new Promise (function(resolve,reject){
+	   firebase.database().ref('users/'+UID).once('value').then(function(snapshop){
+	     resolve(result);
+	   });
+	 });
+	 return getUserAvatarPromise;
+	}
+
+
+
+	// Promise
+
+	let getUserName = function(UID){
+	 let getUserNamePromise = new Promise(function(resolve, reject) {
+	     firebase.database().ref('users/' + UID).once('value').then(function(snapshot) {
+	       filteredObj = snapshot.val().username;
+	       resolve(filteredObj);
+
+	     });
+	    });
+	    return getUserNamePromise;
+	}
+
+
+
+
+
+
+
+
+	// SnackBar
+
+	function notification(msg) {
+	 'use strict';
+	 var snackbarContainer = document.querySelector('#demo-toast-example');
+	 
+	   var data = {message: msg};
+	   snackbarContainer.MaterialSnackbar.showSnackbar(data);
+
+	};
+
+
+	 // [START get_messaging_object]
+	 // Retrieve Firebase Messaging object.
+	 const messaging = firebase.messaging();
+
+	function sendText(){
+
+
+	 var rootRef = firebase.database().ref();
+	 var storesRef = rootRef.child('chat/room1');
+	 var newStoreRef = storesRef.push();
+	 
+	 let txtMsg  = document.getElementById("inputMsg").value;
+	  if(txtMsg==null||txtMsg==""){return}
+
+	var sendtData = {
+	   uid: uid,
+	   uAvartar: photoUrl,
+	   name:name,
+	   message: txtMsg,
+	   timestamp: firebase.database.ServerValue.TIMESTAMP
+	 };
+
+
+
+	 document.getElementById("inputMsg").value="";
+
+
+
+	 var newPostKey = firebase.database().ref().child('chat').child('room1').push().key;
+
+	 // Write the new post's data simultaneously in the posts list and the user's post list.
+	 var updates = {};
+	 updates['/chat/'+'room1/' + newPostKey] = sendtData;
+
+	  firebase.database().ref().update(updates);
+	  //getToBottom();
+	 
+	}
+
+
+
+	function Uppic(Title,image){
+
+
+	}
+
+
+	function GET_Permission() {
+	 messaging.requestPermission()
+	 .then(function() {
+	 console.log("Notification permission granted.");
+	  // TODO(developer): Retrieve a Instance ID token for use with FCM.
+	  // …
+	 })
+	 .catch(function(err) {
+	  console.log("Unable to get permission to notify. ", err);
+	 });
+	}
+
+
+	 // [START receive_message]
+	 // Handle incoming messages. Called when:
+	 // - a message is received while the app has focus
+	 // - the user clicks on an app notification created by a sevice worker
+	 //   `messaging.setBackgroundMessageHandler` handler.
+	 messaging.onMessage(function(payload) {
+	   console.log("Message received. ", payload);
+	   // [START_EXCLUDE]
+	   // Update the UI to include the received message.
+	   appendMessage(payload);
+	   // [END_EXCLUDE]
+	 });
+	 // [END receive_message]
+
+
+	 function showToken() {
+	// Get Instance ID token. Initially this makes a network call, once retrieved
+	// subsequent calls to getToken will return from cache.
+	messaging.getToken()
+	.then(function(currentToken) {
+	 if (currentToken) {
+	  console.log("currentToken", currentToken);
+
+	 } else {
+	  // Show permission request.
+	  console.log("No Instance ID token available. Request permission to generate one.");
+	 // $("#token").html("foo");
+	 }
+	})
+	.catch(function(err) {
+	 console.log("An error occurred while retrieving token. ", err);
+	});
+	}
+	messaging.onTokenRefresh(function() {
+	messaging.getToken()
+	.then(function(refreshedToken) {
+	 console.log("Token refreshed.");
+	 //$(“#token”).html(refreshedToken);
+	})
+	.catch(function(err) {
+	 console.log("Unable to retrieve refreshed token ", err);
+	});
+	});
+
+
+	messaging.onMessage(function(payload) {
+	console.log("Message received. ", payload);
+	});
+
+
+	 function showHideDiv(divId, show) {
+	   const div = document.querySelector('#' + divId);
+	   if (show) {
+	     div.style = "display: visible";
+	   } else {
+	     div.style = "display: none";
+	   }
+	 }
+	 
+
+
+	function getDocHeight(){
+
+	     var body = document.body,
+	     html = document.documentElement;
+
+
+	 return Math.max( body.scrollHeight, body.offsetHeight, 
+	                      html.clientHeight, html.scrollHeight, html.offsetHeight );
+
+	}
+
+
+	function getToBottom(){
+	   $('.mdl-layout__tab-panel').animate({ scrollTop: $(".page-content").outerHeight() }, 'fast');
+	}
+
+
+	 // Add a message to the messages element.
+	 function appendMessage(message,avatar,uid,name,timestamp) {
+
+	   let date = new Date(timestamp);
+	   date = date.getDate() + '/' + (date.getMonth()) + '/' + date.getFullYear()+"  "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+	   // generate Uniq ID
+	   let UniqID = new Date().valueOf()+uid;
+
+	   /*
+	<h5>Received message: on 4/7/2017  20:43:1<\/h5>
+	<pre style="overflow-x: hidden;">ddddd<\/pre>
+	   */
+
+
+
+
+	   //create Body
+	   const messagesElement = document.querySelector('#messages');
+	   const dataDivElement = document.createElement('div');
+	   const dataleftElement = document.createElement('div');
+	   const datarightElement = document.createElement('div');
+	   const dateBox = document.createElement('div');
+	   const msgBoxElement =document.createElement('div');
+
+	   const datarightTopElement = document.createElement('div');
+	   const datarightBottomElement = document.createElement('div');
+
+
+	   //create message
+	   const dataAvartar =document.createElement('img');
+	   const dataElement = document.createElement('pre');
+
+
+	   let user = firebase.auth().currentUser;
+
+
+	   // add class 
+
+	   dataDivElement.className = " mdl-grid chatCard ";
+	   
+
+	     
+	     // align right
+	  //dataleftElement.className= "curChatleftCard";
+	   dataleftElement.className= "mdl-cell mdl-cell--2-col  mdl-cell--1-col-tablet mdl-cell--1-col-phone  ";
+	   datarightElement.className= "mdl-cell mdl-cell--10-col  mdl-cell--3-col-tablet mdl-cell--3-col-phone  chatright ";
+	   datarightTopElement.className ="mdl-cell mdl-cell--12-col  mdl-cell--12-col-tablet mdl-cell--12-col-phone top ";
+	   
+	   //datarightElement.className= "chatrightCard";
+	   datarightBottomElement.className =" mdl-cell  mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-phone bottom ";
+
+	   msgBoxElement.className=" msgBox "
+	   //int metadata 
+	    datarightBottomElement.textContent = message;
+	    dataDivElement.id = UniqID;
+	    dateBox.className ="mdl-tooltip mdl-tooltip--large"; 
+	    dateBox.setAttribute("data-mdl-for",UniqID);
+
+	    dateBox.textContent=date;
+
+	   if(user.uid==uid){
+	     datarightTopElement.className +=" textRight ";
+	      datarightBottomElement.className +=" textRight ";
+	      msgBoxElement.className +=" Fr ";
+	        //append Body
+	   datarightElement.appendChild(datarightTopElement);
+	   msgBoxElement.appendChild(datarightBottomElement);
+	   datarightElement.appendChild(msgBoxElement);
+	   
+	   dataleftElement.appendChild(dataAvartar);
+	   dataDivElement.appendChild(datarightElement);
+	   dataDivElement.appendChild(dataleftElement);
+	   messagesElement.appendChild(dataDivElement);
+
+
+	   }else{
+
+	  
+	     datarightTopElement.className +=" textLeft ";
+	      datarightBottomElement.className +=" textLeft ";
+	      msgBoxElement.className +=" Fl ";
+	    //append Body
+	   datarightElement.appendChild(datarightTopElement);
+	   msgBoxElement.appendChild(datarightBottomElement);
+	   datarightElement.appendChild(msgBoxElement);
+	   
+	   dataleftElement.appendChild(dataAvartar);
+	   dataDivElement.appendChild(dataleftElement);
+	   dataDivElement.appendChild(datarightElement);
+	   messagesElement.appendChild(dataDivElement);
+	   messagesElement.appendChild(dateBox);
+	   }
+
+	   //init Avatar
+	   dataAvartar.className="mdl-cell mdl-cell--8-col  mdl-cell--12-col-tablet mdl-cell--12-col-phone avatar "+uid;
+	   dataAvartar.src=avatar;
+	   
+
+	   //init Message
+	   datarightTopElement.textContent=" "+name + " At " +date;
+
+	/*
+
+
+	<span id="tt2" class="">asdasdasdsa<\/span>
+	<div class="mdl-tooltip mdl-tooltip--large" for="tt2">
+	Print
+	<\/div>
+
+	*/
+	   
+	   //" on " +date;
+	   dataElement.style = 'overflow-x:hidden;'
+	   //dataHeaderElement.textContent = 'Received message: on '+date;
+
+
+
+
+	   //append Messgage
+	   //datarightBottomElement.appendChild(dataElement);
+	 }
+
+
+	// ADD USER DATA
+	function writeUserData(userId, name, email, avatar) {
+	 firebase.database().ref('users/' + userId).set({
+	   username: name,
+	   email: email,
+	   profile_picture : avatar,
+	 });
+	}
+
+
+	function writeNewPost(uid, username, picture, title, body) {
+	 // A post entry.
+	 var postData = {
+	   author: username,
+	   uid: uid,
+	   body: body,
+	   title: title,
+	   starCount: 0,
+	   authorPic: picture
+	 };
+
+	 // Get a key for a new Post.
+	 var newPostKey = firebase.database().ref().child('posts').push().key;
+
+	 // Write the new post's data simultaneously in the posts list and the user's post list.
+	 var updates = {};
+	 updates['/posts/' + newPostKey] = postData;
+	 updates['/user-posts/' + uid + '/' + newPostKey] = postData;
+
+	 return firebase.database().ref().update(updates);
+	}
+
+	 function checkConnection() {
+	       
+	       try {
+	            firebase.checkConnection();
+	        
+	           firebase.InitData();
+	       } catch (error) {
+	           console.log('Data Service error:' + error);
+	       }
+	   }
+
+
+
+	 // Clear the messages element of all children.
+	 function clearMessages() {
+	   const messagesElement = document.querySelector('#messages');
+	   while (messagesElement.hasChildNodes()) {
+	     messagesElement.removeChild(messagesElement.lastChild);
+	   }
+	 }
+
+	 function updateUIForPushEnabled(currentToken) {
+	   showHideDiv(tokenDivId, true);
+	   showHideDiv(permissionDivId, false);
+	   showToken(currentToken);
+	 }
+
+	 function updateUIForPushPermissionRequired() {
+	   showHideDiv(tokenDivId, false);
+	   showHideDiv(permissionDivId, true);
+	 }
+
+	 //resetUI();
+	</script> 
+	<script src="https://code.jquery.com/jquery-1.10.2.js">
+	</script>
 </body>
 </html>
