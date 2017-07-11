@@ -86,7 +86,7 @@ h3 {
 .chatCard .chatright .top{
  
     font-size: .8em;
-    color: gray;
+    color:rgba(0, 0, 0, .33);
     position: relative;
     white-space: pre;
 }
@@ -97,6 +97,16 @@ h3 {
     word-wrap: break-word;
 
 }
+.chatCard .msgBox{
+    background-color: rgba(0, 0, 0, .10);
+    margin: 1px 0;
+    padding: 6px 12px;
+    border-radius: 1.3em;
+
+}
+
+.chatCard   .Fl{  clear: left;float: left;}
+.chatCard   .Fr{clear: right;float: right;}
 
 .chatCard .textLeft{
   text-align: left;
