@@ -84,7 +84,7 @@ h3 {
 }
   
 .chatCard .chatright .top{
-    text-align: left;
+ 
     font-size: .8em;
     color: gray;
     position: relative;
@@ -98,17 +98,19 @@ h3 {
 
 }
 
+.chatCard .textLeft{
+  text-align: left;
+}
 
+.chatCard .textRight{
+  text-align: right;
+}
 
  
 .chatCard .bottom{
  font-size: 1.3em;
 }
-
-.chatCard .curBottom{
-  text-align: right;
-  font-size: 1.3em;
-}
+ 
 .back-to-top{
   font-weight: bold;
   text-decoration: none;
